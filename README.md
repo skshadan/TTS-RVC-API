@@ -93,5 +93,5 @@ else:
 ```
 ## Feedback
 
-If you have any feedback, issues please reach out to us at shadankhantech@gmail.com
+If you have any feedback, issues please reach out to shadankhantech@gmail.com
 
