@@ -1,0 +1,13 @@
+[rvc]
+# path of directory containing RVC v2 voice models
+model_dir = "D:\\rvc-api\\tts-rvc\\models"
+
+# Map the bark voice to your RVC models
+#[rvc.bark_voice_map]
+#default = "v2/en_speaker_6"
+#spearker1 = "v2/en_speaker_9"
+
+[tts]
+# path of directory where tts audio output will be saved
+# Always saves to path "<output_dir>/bark_out.wav" so overwritten for each generation
+output_dir = "D:\\rvc-api\\tts-rvc\\tmp"
