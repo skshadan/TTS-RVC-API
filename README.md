@@ -11,15 +11,14 @@ Yes, we can use Coqui with RVC!
 How to use Coqui + RVC api?
 
 ```python
-  https://github.com/skshadan/TTS-RVC-API.git
+https://github.com/skshadan/TTS-RVC-API.git
 ```
 ```python
-  python -m venv .venv
+python -m venv .venv
 . .venv/bin/activate
 pip install -r requirements.txt
-
-python -m uvicorn app.main:app
 pip install TTS
+python -m uvicorn app.main:app
 ```
 Now update `config.toml` with relative paths
 config `model_dir` path or set a `speaker_name` in the request body
