@@ -55,7 +55,7 @@ async def generate(gen: Generation):
     print(f"GHANTA time {ghanta_duration:.2f}s")
     
     if rvc_speaker_id:
-        return StreamingResponse(wav, media_type="audio/x-wav")
+        return FileResponse(wav, media_type="audio/x-wav")
     else:
         response = FileResponse(wav, media_type="audio/x-wav")
     tot_duration = time.time() - t1
