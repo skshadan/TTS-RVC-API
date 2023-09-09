@@ -1,3 +1,7 @@
+# Solution for installation issues  
+- Run on Python 3.10
+- Install ffmpeg (conda install -c conda-forge ffmpeg)
+
 
 # TTS-RVC-API
 
