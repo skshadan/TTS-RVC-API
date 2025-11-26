@@ -22,7 +22,6 @@ async def generate(gen: Generation):
 
     rvc_speaker_id, wav = server(
         text=gen.input_text,
-        tts_output_dir=config["tts"]["output_dir"],
         speaker_name=gen.speaker_name,
         emotion=gen.emotion,
         speed=gen.speed 
