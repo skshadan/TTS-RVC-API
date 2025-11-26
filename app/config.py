@@ -21,6 +21,9 @@ def parse_config():
         "tts": {},
     }
     config_file = None
+    cur_folder = os.path.abspath(os.getcwd())
+    print(cur_folder)
+    
     try:
         with open("config.toml", mode="rb") as fp:
             config_file = tomli.load(fp)
