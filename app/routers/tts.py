@@ -21,8 +21,49 @@ os.makedirs(OUTPUT_DIR, exist_ok=True)
 os.makedirs(TMP_DIR, exist_ok=True)
 os.makedirs(RVC_MODEL_DIR, exist_ok=True)
 
-# Initialize TTS
-tts = TTS(model_name="tts_models/en/ljspeech/vits", progress_bar=True, gpu=False)
+
+import torch
+from structlog import get_logger
+
+log = get_logger(__name__)
+
+def detect_tts_device():
+    """Return 'cuda' if a usable GPU is available, otherwise 'cpu'."""
+
+    # is any GPU visible?
+    if not torch.cuda.is_available():
+        log.warn("No CUDA GPU detected → using CPU.")
+        return "cpu"
+
+    try:
+        major, minor = torch.cuda.get_device_capability()
+        cc = major * 10 + minor
+
+        log.info(f"Found GPU compute capability: {major}.{minor} (cc={cc})")
+
+        # PyTorch 2.1+ requires at least compute capability 7.5
+        if cc < 75:
+            log.warn(f"GPU compute capability {major}.{minor} is too old for PyTorch "
+                     f"(requires >= 7.5). Falling back to CPU.")
+            return "cpu"
+
+        # Try a tiny CUDA op to verify
+        try:
+            test = torch.tensor([1.0]).cuda() * 2
+            log.info("CUDA test operation succeeded → USING GPU.")
+            return "cuda"
+        except Exception as e:
+            log.error(f"CUDA test operation failed → GPU unusable → CPU. Error: {e}")
+            return "cpu"
+
+    except Exception as e:
+        log.error(f"Error checking GPU: {e}. Falling back to CPU.")
+        return "cpu"
+
+
+device = detect_tts_device()
+tts = TTS(model_name="tts_models/en/ljspeech/vits", progress_bar=True, gpu=(device=="cuda"))
+log.info(f"TTS initialized on device: {device}")
 os.environ["CUDA_VISIBLE_DEVICES"] = "0"
 log = get_logger(__name__)
 
