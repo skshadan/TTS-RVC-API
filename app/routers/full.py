@@ -1,9 +1,9 @@
 from fastapi import APIRouter
 from fastapi.responses import StreamingResponse, FileResponse
-from app.routers.tts import server
+from .tts import server
 from pydantic import BaseModel
-from app.config import config
 from typing import Optional
+import io
 
 router = APIRouter(
     prefix="/generate",
@@ -19,14 +19,17 @@ class Generation(BaseModel):
 
 @router.post("/")
 async def generate(gen: Generation):
-
-    rvc_speaker_id, wav = server(
+    from fastapi.concurrency import run_in_threadpool
+    rvc_speaker_id, audio_data = await run_in_threadpool(
+        server,
         text=gen.input_text,
         speaker_name=gen.speaker_name,
         emotion=gen.emotion,
         speed=gen.speed 
     )
-    if rvc_speaker_id:
-        return StreamingResponse(wav, media_type="audio/x-wav")
-    else:
-        return FileResponse(wav, media_type="audio/x-wav")
+    if isinstance(audio_data, io.BytesIO):
+        audio_data.seek(0)
+        return StreamingResponse(audio_data, media_type="audio/wav")
+
+    # TTS-only returns a filepath
+    return FileResponse(audio_data, media_type="audio/wav")
