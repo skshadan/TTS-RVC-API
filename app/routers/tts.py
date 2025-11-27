@@ -130,7 +130,7 @@ def server(
     full_script = " ".join(sentences)
 
     # Generate audio using TTS
-    tts.tts_to_file(text=full_script, file_path=tts_tmp_file, emotion="Surprise", speed=1.0)
+    tts.tts_to_file(text=full_script, file_path=tts_tmp_file, emotion=emotion, speed=speed)
 
     t0 = time.time()
     generation_duration_s = time.time() - t0
