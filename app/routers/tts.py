@@ -1,5 +1,5 @@
 from TTS.api import TTS
-import huggingface_hub, numpy as np, os, time, io, glob
+import huggingface_hub, numpy as np, os, time, io, glob, torch
 from nltk.tokenize import sent_tokenize
 from scipy.io.wavfile import write
 from typing import Optional
@@ -21,9 +21,6 @@ os.makedirs(OUTPUT_DIR, exist_ok=True)
 os.makedirs(TMP_DIR, exist_ok=True)
 os.makedirs(RVC_MODEL_DIR, exist_ok=True)
 
-
-import torch
-from structlog import get_logger
 
 log = get_logger(__name__)
 
@@ -63,9 +60,9 @@ def detect_tts_device():
 
 device = detect_tts_device()
 tts = TTS(model_name="tts_models/en/ljspeech/vits", progress_bar=True, gpu=(device=="cuda"))
-log.info(f"TTS initialized on device: {device}")
 os.environ["CUDA_VISIBLE_DEVICES"] = "0"
-log = get_logger(__name__)
+log.info(f"TTS initialized on device: {device}")
+
 
 def get_output_filename(user_name: Optional[str] = None):
     """
